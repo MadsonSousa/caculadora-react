@@ -3,10 +3,29 @@ import { StyleSheet, View } from 'react-native'
 import Button from './src/components/Button'
 import Display from './src/components/Display'
 
+const initialState = {
+  displayValue: '0',
+  clearDisplay: false,
+  operation: null,
+  values: [0, 0],
+  current:0
+}
+
 export default class App extends Component {
-  state = {
-    displayValue: '0'
+  state = { ...initialState }
+
+  addDigit = n => {
+    console.debug(this.state.displayValue)
+    const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay
+    if(n === '.' && !clearDisplay && this.state.displayValue.includes('.')) {
+      return
+    }
+
+    const currentValue = clearDisplay ? '' : this.state.displayValue
+    const displayValue = currentValue + n
+    this.setState({ displayValue, clearDisplay: false })
   }
+
   render() {
     return (
       <View style={styles.container}>
@@ -14,20 +33,20 @@ export default class App extends Component {
         <View style={styles.buttons}>
           <Button label='AC' triple />
           <Button label='/' operation />
-          <Button label='7' />
-          <Button label='8' />
-          <Button label='9' />
+          <Button label='7' onClick={this.addDigit} />
+          <Button label='8' onClick={this.addDigit} />
+          <Button label='9' onClick={this.addDigit} />
           <Button label='*' operation />
-          <Button label='4' />
-          <Button label='5' />
-          <Button label='6' />
+          <Button label='4' onClick={this.addDigit} />
+          <Button label='5' onClick={this.addDigit} />
+          <Button label='6' onClick={this.addDigit} />
           <Button label='-' operation />
-          <Button label='1' />
-          <Button label='2' />
-          <Button label='3' />
+          <Button label='1' onClick={this.addDigit} />
+          <Button label='2' onClick={this.addDigit} />
+          <Button label='3' onClick={this.addDigit} />
           <Button label='+' operation />
           <Button label='0' double />
-          <Button label='.' />
+          <Button label='.' onClick={this.addDigit} />
           <Button label='=' operation />
         </View>
       </View>
