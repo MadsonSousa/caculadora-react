@@ -15,15 +15,18 @@ export default class App extends Component {
   state = { ...initialState }
 
   addDigit = n => {
-    console.debug(this.state.displayValue)
     const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay
-    if(n === '.' && !clearDisplay && this.state.displayValue.includes('.')) {
+    if (n === '.' && !clearDisplay && this.state.displayValue.includes('.')) {
       return
     }
 
-    const currentValue = clearDisplay ? '' : this.state.displayValue
+    const currentValue = clearDisplay && n !== '.' ? '' : this.state.displayValue
     const displayValue = currentValue + n
     this.setState({ displayValue, clearDisplay: false })
+  }
+
+  clearDisplay = () => {
+    this.setState({ ...initialState })
   }
 
   render() {
@@ -31,7 +34,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <Display value={this.state.displayValue} />
         <View style={styles.buttons}>
-          <Button label='AC' triple />
+          <Button label='AC' triple onClick={this.clearDisplay} />
           <Button label='/' operation />
           <Button label='7' onClick={this.addDigit} />
           <Button label='8' onClick={this.addDigit} />
@@ -45,7 +48,7 @@ export default class App extends Component {
           <Button label='2' onClick={this.addDigit} />
           <Button label='3' onClick={this.addDigit} />
           <Button label='+' operation />
-          <Button label='0' double />
+          <Button label='0' double onClick={this.addDigit} />
           <Button label='.' onClick={this.addDigit} />
           <Button label='=' operation />
         </View>
